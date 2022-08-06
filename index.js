@@ -16,7 +16,7 @@ bot.onText(/\/start (.+)/, (msg, match) => {
   const resp = match[1]; // the captured "whatever"
 
   // send back the matched "whatever" to the chat
-  bot.sendMessage(chatId, "let's begin!");
+  bot.sendMessage(chatId, "Hajime!");
 });
 
 // Listen for any kind of message. There are different kinds of
