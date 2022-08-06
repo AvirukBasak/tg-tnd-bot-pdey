@@ -18,6 +18,9 @@
   },
   "homepage": "https://github.com/AvirukBasak/tg-tnd-bot-pdey#readme",
   "dependencies": {
-    "node-telegram-bot-api": "^0.58.0"
+    "dotenv": "^16.0.1",
+    "express": "^4.18.1",
+    "node-telegram-bot-api": "^0.58.0",
+    "request": "^2.88.2"
   }
 }
