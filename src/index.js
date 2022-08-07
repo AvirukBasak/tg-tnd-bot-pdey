@@ -21,7 +21,7 @@ const Obj = {};
 
 function sendMsg(chatid, msg)
 {
-    if (DEBUG.includes(chatid))
+    if (DEBUG.includes("" + chatid))
         console.log("reply: " + chatid + ": " + msg);
     Bot.sendMessage(chatid, msg, { parse_mode: "markdown" });
 }
