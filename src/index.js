@@ -2,6 +2,7 @@ const TelegramBot = require("node-telegram-bot-api");
 
 // load environment variables
 const TOKEN = process.env.AUTH_TOKEN;
+const BOT_NAME = process.env.BOT_NAME;
 const BOT_USRNAME = process.env.BOT_USRNAME;
 const MASTER_PASSWD = process.env.MASTER_PASSWD;
 
@@ -22,12 +23,8 @@ function sendMsg(chatid, msg)
 Bot.onText(/\/msginf(.*)/, (msg, match) => {
     if (msg.from.is_bot)
         return;
-    if (match[1] !== " " + MASTER_PASSWD) {
-        sendMsg("Command /msginf requires `MASTER_PASSWD` as argument");
+    if (match[1] !== " " + MASTER_PASSWD)
         return;
-    }
-    console.log("m0: " + match[0]);
-    console.log("m1: " + match[1]);
     sendMsg(
         msg.chat.id,
         `${CODEBLOCK}${JSON.stringify(msg, null, 2)}${CODEBLOCK}`
@@ -37,11 +34,8 @@ Bot.onText(/\/msginf(.*)/, (msg, match) => {
 Bot.onText(/\/help\@(.+)/, (msg, match) => {
     if (msg.from.is_bot)
         return;
-    if (match[1] !== BOT_USRNAME) {
-        console.log("m0: " + match[0]);
-        console.log("m1: " + match[1]);
+    if (match[1] !== BOT_USRNAME)
         return;
-    }
     const reply = (
         "Commands:\n"
         + "  /help - Display this message\n"
@@ -59,16 +53,17 @@ Bot.onText(/\/help\@(.+)/, (msg, match) => {
 Bot.onText(/\/start\@(.+)/, (msg, match) => {
     if (msg.from.is_bot)
         return;
-    if (match[1] !== BOT_USRNAME) {
-        console.log("m0: " + match[0]);
-        console.log("m1: " + match[1]);
+    if (match[1] !== BOT_USRNAME)
+        return;
+    if (Obj["" + msg.chat.id]?.players) {
+        sendMsg(msg.chat.id, `Game has already started!`);
         return;
     }
     Obj["" + msg.chat.id] = {
         players: [],
         round: 0
     };
-    sendMsg(msg.chat.id, `${BOT_USRNAME} has started listening!`);
+    sendMsg(msg.chat.id, `${BOT_NAME} has started listening!`);
 });
 
 Bot.onText(/\/join/, (msg, match) => {
@@ -117,7 +112,7 @@ Bot.onText(/\/list/, (msg, match) => {
         sendMsg(msg.chat.id, `There're no participants`);
         return;
     }
-    let reply = "### Usernames of participants:\n";
+    let reply = "Usernames of participants:\n";
     for (const player of Obj["" + msg.chat.id].players) {
         reply += `- \@${player}\n`;
     }
@@ -135,7 +130,7 @@ Bot.onText(/\/spin/, (msg, match) => {
     const players = chat.players;
     const len = players.length;
     if (len < 2) {
-        sendMsg(msg.chat.id, `Truth n Dare requires a minimum of 2 players, but they're only ${len} players present`);
+        sendMsg(msg.chat.id, `Truth n Dare requires a minimum of 2 players, but they're ${len} player(s) present`);
         sendMsg(msg.chat.id, `Use /join command to participate`);
         return;
     }
@@ -155,25 +150,19 @@ Bot.onText(/\/stop\@(.+)/, (msg, match) => {
         sendMsg(msg.chat.id, `You need to /start the game before you can /stop`);
         return;
     }
-    if (match[1] !== BOT_USRNAME) {
-        console.log("m0: " + match[0]);
-        console.log("m1: " + match[1]);
+    if (match[1] !== BOT_USRNAME)
         return;
-    }
     delete Obj["" + msg.chat.id];
-    sendMsg(msg.chat.id, `${BOT_USRNAME} has stopped listening!`);
+    sendMsg(msg.chat.id, `${BOT_NAME} has stopped listening!`);
 });
 
 Bot.onText(/\/about\@(.+)/, (msg, match) => {
     if (msg.from.is_bot)
         return;
-    if (match[1] !== BOT_USRNAME) {
-        console.log("m0: " + match[0]);
-        console.log("m1: " + match[1]);
+    if (match[1] !== BOT_USRNAME)
         return;
-    }
     const reply = (
-        `Bot: ${BOT_USRNAME}:\n`
+        `Bot: ${BOT_NAME}:\n`
         + "sources: https://github.com/AvirukBasak/tg-tnd-bot-pdey\n"
         + "license: MIT"
     );
