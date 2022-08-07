@@ -66,7 +66,7 @@ Bot.onText(/^\/debug/, (msg, match) => {
 Bot.onText(/^\/msginfo/, (msg, match) => {
     if (msg.from.is_bot)
         return;
-    Bot.sendMessage(chatid,
+    Bot.sendMessage(
         msg.chat.id,
         `${CODEBLOCK}${JSON.stringify(msg, null, 2)}${CODEBLOCK}`,
         { parse_mode: "markdown" }
