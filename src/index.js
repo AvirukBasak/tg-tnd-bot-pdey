@@ -1,16 +1,18 @@
+process.env.NTBA_FIX_319 = 1;
 const TelegramBot = require('node-telegram-bot-api');
-const TOKEN = process.env.TG_TND_BOT_TOKEN;
-const bot = new TelegramBot(TOKEN, { polling: true });
+const Agent = require('socks5-https-client/lib/Agent');
+const token = process.env.AUTH_TOKEN;
 
-console.log("tok: " + TOKEN.toString().substring(TOKEN.length -6, TOKEN.length -1));
+const bot = new TelegramBot(token, {polling:true,request:{
+    agentClass: Agent,
+    agentOptions: {
+        socksHost: process.env.SOCKS5_HOST
+        socksPort: process.env.SOCKS5_PORT
+    }
+}});
 
 bot.on('message', (msg) => {
-    console.log(msg);
-    bot.sendMessage(msg.chat.id, "hi");
+    bot.sendMessage(msg.chat.id, "hello");
 });
 
-bot.onText(/\/about/, (msg, match) => {
-    let chatId = msg.chat.id;
-    bot.sendMessage(chatId,
-        `finder bot\nbot where you can search for a movie and get details about it.`, { parse_mode: 'Markdown' });
-});
+bot.on("polling_error", (msg) => console.log(msg));
