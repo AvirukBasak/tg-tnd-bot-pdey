@@ -18,7 +18,6 @@
   },
   "homepage": "https://github.com/AvirukBasak/tg-tnd-bot-pdey#readme",
   "dependencies": {
-    "node-telegram-bot-api": "^0.58.0",
-    "socks5-https-client": "^1.2.1"
+    "node-telegram-bot-api": "^0.58.0"
   }
 }
