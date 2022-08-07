@@ -93,7 +93,7 @@ Bot.onText(/^\/start/, (msg, match) => {
         return;
     }
     Obj["" + msg.chat.id] = {
-        players: [ msg.from.username ],
+        players: [ (msg.from.username || msg.from.first_name + "_" + msg.from.last_name) ],
         round: 0
     };
     sendMsg(msg.chat.id, `${BOT_NAME} has started listening!`);
@@ -110,7 +110,7 @@ Bot.onText(/^\/join/, (msg, match) => {
         sendMsg(msg.chat.id, `You need to /start the game before you can /join`);
         return;
     }
-    const player = msg.from.username;
+    const player = (msg.from.username || msg.from.first_name + "_" + msg.from.last_name);
     if (!Obj["" + msg.chat.id].players.includes(player)) {
         Obj["" + msg.chat.id].players.push(player);
     } else {
@@ -132,7 +132,7 @@ Bot.onText(/^\/leave/, (msg, match) => {
         return;
     }
     const players = Obj["" + msg.chat.id].players;
-    const player = msg.from.username;
+    const player = (msg.from.username || msg.from.first_name + "_" + msg.from.last_name);
     if (players.includes(player)) {
         Obj["" + msg.chat.id].players.splice(players.indexOf(player), 1);
     } else {
