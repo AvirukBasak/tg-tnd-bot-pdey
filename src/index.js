@@ -170,7 +170,9 @@ Bot.onText(/\/about\@(.+)/, (msg, match) => {
     sendMsg(msg.chat.id, reply);
 });
 
-// Bot.on("polling_error", (msg) => console.log(msg));
+Bot.on("polling_error", (msg) => {
+    console.log(JSON.stringify(msg));
+});
 
 Http.createServer((req, res) => {
   res.write(`<html><head><title>${BOT_USRNAME}</title></head><body><h1>started: ${BOT_NAME}: ${BOT_USRNAME}</h1></body></html>`);
