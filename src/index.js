@@ -188,7 +188,7 @@ Bot.onText(/^\/spin/, (msg, match) => {
     const pick1 = players[Math.floor(Math.random() * players.length)];
     let pick2 = pick1;
     while (pick2 == pick1) {
-        let pick2 = players[Math.floor(Math.random() * players.length)];
+        pick2 = players[Math.floor(Math.random() * players.length)];
     }
     const reply = `Round ${++chat.round}\n\@${pick1} asks!\n\@${pick2} answers!`;
     sendMsg(msg.chat.id, reply);
