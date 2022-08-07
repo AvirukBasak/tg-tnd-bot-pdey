@@ -171,7 +171,9 @@ Bot.onText(/\/about\@(.+)/, (msg, match) => {
 });
 
 Bot.on("polling_error", (msg) => {
-    return;
+    // hide multiple instances active error
+    if (msg.message !== "ETELEGRAM: 409 Conflict: terminated by other getUpdates request; make sure that only one bot instance is running")
+        console.log(JSON.stringify(msg));
 });
 
 Http.createServer((req, res) => {
