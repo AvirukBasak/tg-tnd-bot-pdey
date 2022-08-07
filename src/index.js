@@ -44,14 +44,14 @@ Bot.onText(/\/help\@(.+)/, (msg, match) => {
     }
     const reply = (
         "Commands:\n"
-        + "  /help  -- Display this message\n"
-        + "  /start -- Make bot listen to this chat/group\n"
-        + "  /join  -- Participate in the Truth n Dare game\n"
-        + "  /list  -- List all participants\n"
-        + "  /spin  -- Select two random people\n"
-        + "  /leave -- Leave the game\n"
-        + "  /stop  -- Make bot stop listening to this chat/group\n"
-        + "  /about -- Link to sources"
+        + "  /help - Display this message\n"
+        + "  /start - Listen to this chat\n"
+        + "  /join - Join game\n"
+        + "  /list - List players\n"
+        + "  /spin - Select two randomly\n"
+        + "  /leave - Leave game\n"
+        + "  /stop - Stop listening\n"
+        + "  /about - Sources"
     );
     sendMsg(msg.chat.id, reply);
 });
@@ -68,7 +68,7 @@ Bot.onText(/\/start\@(.+)/, (msg, match) => {
         players: [],
         round: 0
     };
-    sendMsg(msg.chat.id, `\@${BOT_USRNAME} has started listening!`);
+    sendMsg(msg.chat.id, `\x40${BOT_USRNAME} has started listening!`);
 });
 
 Bot.onText(/\/join/, (msg, match) => {
@@ -82,10 +82,10 @@ Bot.onText(/\/join/, (msg, match) => {
     if (!Obj["" + msg.chat.id].players.includes(player)) {
         Obj["" + msg.chat.id].players.push(player);
     } else {
-        sendMsg(msg.chat.id, `\@${player}, you're already in the game!`);
+        sendMsg(msg.chat.id, `\x40${player}, you're already in the game!`);
         return;
     }
-    sendMsg(msg.chat.id, `\@${player} has joined the game!`);
+    sendMsg(msg.chat.id, `\x40${player} has joined the game!`);
 });
 
 Bot.onText(/\/leave/, (msg, match) => {
@@ -100,10 +100,10 @@ Bot.onText(/\/leave/, (msg, match) => {
     if (players.includes(player)) {
         Obj["" + msg.chat.id].players.splice(players.indexOf(player), 1);
     } else {
-        sendMsg(msg.chat.id, `\@${player}, you aren't in the game!`);
+        sendMsg(msg.chat.id, `\x40${player}, you aren't in the game!`);
         return;
     }
-    sendMsg(msg.chat.id, `\@${player} has left the game`);
+    sendMsg(msg.chat.id, `\x40${player} has left the game`);
 });
 
 Bot.onText(/\/list/, (msg, match) => {
@@ -119,7 +119,7 @@ Bot.onText(/\/list/, (msg, match) => {
     }
     let reply = "### Usernames of participants:";
     for (const player of Obj["" + msg.chat.id].players) {
-        reply += `- \@${player}\n`;
+        reply += `- \x40${player}\n`;
     }
     sendMsg(msg.chat.id, reply);
 });
@@ -144,7 +144,7 @@ Bot.onText(/\/spin/, (msg, match) => {
     while (pick2 == pick1) {
         let pick2 = players[Math.floor(Math.random() * players.length)];
     }
-    const reply = `### Round ${++chat.round}\n\@${pick1} asks!\n\@${pick2} answers!`;
+    const reply = `### Round ${++chat.round}\n\x40${pick1} asks!\n\x40${pick2} answers!`;
     sendMsg(msg.chat.id, reply);
 });
 
@@ -161,7 +161,7 @@ Bot.onText(/\/stop\@(.+)/, (msg, match) => {
         return;
     }
     delete Obj["" + msg.chat.id];
-    sendMsg(msg.chat.id, `\@${BOT_USRNAME} has stopped listening!`);
+    sendMsg(msg.chat.id, `\x40${BOT_USRNAME} has stopped listening!`);
 });
 
 Bot.onText(/\/about\@(.+)/, (msg, match) => {
@@ -173,8 +173,8 @@ Bot.onText(/\/about\@(.+)/, (msg, match) => {
         return;
     }
     const reply = (
-        `Bot \@${BOT_USRNAME}:`
-        + "sources: [tg-tnd-bot-pdey](https://github.com/AvirukBasak/tg-tnd-bot-pdey)\n"
+        `Bot \x40${BOT_USRNAME}:`
+        + "sources: https://github.com/AvirukBasak/tg-tnd-bot-pdey\n"
         + "license: MIT"
     );
     sendMsg(msg.chat.id, reply);
