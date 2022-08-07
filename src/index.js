@@ -44,7 +44,7 @@ function sendMsg(chatid, msg)
 {
     if (DEBUG.includes("" + chatid))
         console.log("reply: " + chatid + ": " + msg.replace(/\n/g, "; "));
-    Bot.sendMessage(chatid, msg, { parse_mode: "markdown" });
+    Bot.sendMessage(chatid, msg);
 }
 
 Bot.onText(/^\/dev/, (msg, match) => {
@@ -66,9 +66,10 @@ Bot.onText(/^\/debug/, (msg, match) => {
 Bot.onText(/^\/msginfo/, (msg, match) => {
     if (msg.from.is_bot)
         return;
-    sendMsg(
+    Bot.sendMessage(chatid,
         msg.chat.id,
-        `${CODEBLOCK}${JSON.stringify(msg, null, 2)}${CODEBLOCK}`
+        `${CODEBLOCK}${JSON.stringify(msg, null, 2)}${CODEBLOCK}`,
+        { parse_mode: "markdown" }
     );
 });
 
@@ -86,7 +87,7 @@ Bot.onText(/^\/start/, (msg, match) => {
         return;
     }
     if (Obj["" + msg.chat.id]?.players) {
-        sendMsg(msg.chat.id, `Game has already started!`);
+        sendMsg(msg.chat.id, `${BOT_NAME} is already listening!`);
         return;
     }
     Obj["" + msg.chat.id] = {
@@ -187,7 +188,7 @@ Bot.onText(/^\/spin/, (msg, match) => {
     while (pick2 == pick1) {
         let pick2 = players[Math.floor(Math.random() * players.length)];
     }
-    const reply = `### Round ${++chat.round}\n\@${pick1} asks!\n\@${pick2} answers!`;
+    const reply = `Round ${++chat.round}\n\@${pick1} asks!\n\@${pick2} answers!`;
     sendMsg(msg.chat.id, reply);
 });
 
