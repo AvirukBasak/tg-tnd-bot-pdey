@@ -22,7 +22,7 @@ function sendMsg(chatid, msg)
 Bot.onText(/\/msginf (.+)/, (msg, match) => {
     if (msg.from.is_bot)
         return;
-    if (match[0] !== MASTER_PASSWD) {
+    if (match[1] !== MASTER_PASSWD) {
         sendMsg("Command /msginf requires `MASTER_PASSWD` as argument");
         return;
     }
@@ -35,7 +35,7 @@ Bot.onText(/\/msginf (.+)/, (msg, match) => {
 Bot.onText(/\/help@(.+)/, (msg, match) => {
     if (msg.from.is_bot)
         return;
-    if (match[0] !== BOT_USRNAME)
+    if (match[1] !== BOT_USRNAME)
         return;
     const reply = (
         "Commands:\n"
@@ -54,7 +54,7 @@ Bot.onText(/\/help@(.+)/, (msg, match) => {
 Bot.onText(/\/start@(.+)/, (msg, match) => {
     if (msg.from.is_bot)
         return;
-    if (match[0] !== BOT_USRNAME)
+    if (match[1] !== BOT_USRNAME)
         return;
     Obj["" + msg.chat.id] = {
         players: [],
@@ -146,7 +146,7 @@ Bot.onText(/\/stop@(.+)/, (msg, match) => {
         sendMsg(msg.chat.id, `You need to /start the game before you can /stop`);
         return;
     }
-    if (match[0] !== BOT_USRNAME)
+    if (match[1] !== BOT_USRNAME)
         return;
     delete Obj["" + msg.chat.id];
     sendMsg(msg.chat.id, `@${BOT_USRNAME} has stopped listening!`);
@@ -155,7 +155,7 @@ Bot.onText(/\/stop@(.+)/, (msg, match) => {
 Bot.onText(/\/about@(.+)/, (msg, match) => {
     if (msg.from.is_bot)
         return;
-    if (match[0] !== BOT_USRNAME)
+    if (match[1] !== BOT_USRNAME)
         return;
     const reply = (
         `Bot @${BOT_USRNAME}:`
