@@ -61,7 +61,7 @@ Bot.onText(/\/start\@(.+)/, (msg, match) => {
         return;
     }
     Obj["" + msg.chat.id] = {
-        players: [],
+        players: [ msg.from.username ],
         round: 0
     };
     sendMsg(msg.chat.id, `${BOT_NAME} has started listening!`);
@@ -170,7 +170,7 @@ Bot.onText(/\/about\@(.+)/, (msg, match) => {
     sendMsg(msg.chat.id, reply);
 });
 
-Bot.on("polling_error", (msg) => console.log(msg));
+// Bot.on("polling_error", (msg) => console.log(msg));
 
 Http.createServer((req, res) => {
   res.write(`<html><head><title>${BOT_USRNAME}</title></head><body><h1>started: ${BOT_NAME}: ${BOT_USRNAME}</h1></body></html>`);
