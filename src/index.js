@@ -15,6 +15,7 @@ const CODEBLOCK = "```";
 
 // help text
 const HELP_TXT = (
+    "Start the bot service by visiting https://tg-tnd-bot-pdey.herokuapp.com\n\n" + 
     "Commands:\n"
     + "  /help - Display this message\n"
     + "  /start - Listen to this chat\n"
@@ -24,6 +25,13 @@ const HELP_TXT = (
     + "  /leave - Leave game\n"
     + "  /stop - Stop listening\n"
     + "  /about - Sources"
+);
+
+// developer commands
+const DEV_CMD = (
+    "Developer's commands:\n"
+    + "  /msginfo - Info about msg\n"
+    + "  /debug - Log replies at server"
 );
 
 // DEBUG flag
@@ -38,6 +46,12 @@ function sendMsg(chatid, msg)
         console.log("reply: " + chatid + ": " + msg.replace(/\n/g, "; "));
     Bot.sendMessage(chatid, msg, { parse_mode: "markdown" });
 }
+
+Bot.onText(/^\/dev/, (msg, match) => {
+    if (msg.from.is_bot)
+        return;
+    sendMsg(msg.chat.id, DEV_CMD);
+});
 
 Bot.onText(/^\/debug/, (msg, match) => {
     if (!DEBUG.includes("" + msg.chat.id)) {
@@ -58,23 +72,19 @@ Bot.onText(/^\/msginfo/, (msg, match) => {
     );
 });
 
-Bot.onText(/^\/help(.*)/, (msg, match) => {
+Bot.onText(/^\/help/, (msg, match) => {
     if (msg.from.is_bot)
-        return;
-    if (msg.chat.type !== "private" && match[1] !== `@${BOT_USRNAME}`)
         return;
     sendMsg(msg.chat.id, HELP_TXT);
 });
 
-Bot.onText(/^\/start(.*)/, (msg, match) => {
+Bot.onText(/^\/start/, (msg, match) => {
     if (msg.from.is_bot)
         return;
     if (msg.chat.type === "private") {
-        sendMsg(msg.chat.id, "Start the bot service by visiting https://tg-tnd-bot-pdey.herokuapp.com\n\n" + HELP_TXT);
+        sendMsg(msg.chat.id, HELP_TXT);
         return;
     }
-    if (match[1] !== `@${BOT_USRNAME}`)
-        return;
     if (Obj["" + msg.chat.id]?.players) {
         sendMsg(msg.chat.id, `Game has already started!`);
         return;
@@ -166,8 +176,10 @@ Bot.onText(/^\/spin/, (msg, match) => {
     const players = chat.players;
     const len = players.length;
     if (len < 2) {
-        sendMsg(msg.chat.id, `Truth n Dare requires a minimum of 2 players, but they're ${len} player(s) present`);
-        sendMsg(msg.chat.id, `Use /join command to participate`);
+        sendMsg(msg.chat.id,
+            `Truth n Dare requires a minimum of 2 players, but they're ${len} player(s) present\n`
+            + `Use /join command to participate`
+        );
         return;
     }
     const pick1 = players[Math.floor(Math.random() * players.length)];
@@ -179,7 +191,7 @@ Bot.onText(/^\/spin/, (msg, match) => {
     sendMsg(msg.chat.id, reply);
 });
 
-Bot.onText(/^\/stop(.*)/, (msg, match) => {
+Bot.onText(/^\/stop/, (msg, match) => {
     if (msg.from.is_bot)
         return;
     if (msg.chat.type === "private") {
@@ -190,16 +202,12 @@ Bot.onText(/^\/stop(.*)/, (msg, match) => {
         sendMsg(msg.chat.id, `You need to /start the game before you can /stop`);
         return;
     }
-    if (match[1] !== `@${BOT_USRNAME}`)
-        return;
     delete Obj["" + msg.chat.id];
     sendMsg(msg.chat.id, `${BOT_NAME} has stopped listening!`);
 });
 
-Bot.onText(/^\/about(.*)/, (msg, match) => {
+Bot.onText(/^\/about/, (msg, match) => {
     if (msg.from.is_bot)
-        return;
-    if (msg.chat.type !== "private" && match[1] !== `@${BOT_USRNAME}`)
         return;
     const reply = (
         `Bot: ${BOT_NAME}:\n`
