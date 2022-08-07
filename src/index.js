@@ -173,7 +173,7 @@ Bot.onText(/\/about\@(.+)/, (msg, match) => {
         return;
     }
     const reply = (
-        `Bot: ${BOT_USRNAME}:`
+        `Bot: ${BOT_USRNAME}:\n`
         + "sources: https://github.com/AvirukBasak/tg-tnd-bot-pdey\n"
         + "license: MIT"
     );
