@@ -7,7 +7,7 @@ const APP_URL = process.env.APP_URL;
 const BOT_NAME = process.env.BOT_NAME;
 const BOT_USRNAME = process.env.BOT_USRNAME;
 const MASTER_PASSWD = process.env.MASTER_PASSWD;
-const SELF_REQ_TIMELIM = number(process.env.SELF_REQ_TIMELIM);
+const SELF_REQ_TIMELIM = Number(process.env.SELF_REQ_TIMELIM);
 
 // create bot
 const Bot = new TelegramBot(TOKEN, { polling: true });
