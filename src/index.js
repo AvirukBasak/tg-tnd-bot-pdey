@@ -1,4 +1,5 @@
 const TelegramBot = require("node-telegram-bot-api");
+const Http = require('http');
 
 // load environment variables
 const TOKEN = process.env.AUTH_TOKEN;
@@ -170,3 +171,8 @@ Bot.onText(/\/about\@(.+)/, (msg, match) => {
 });
 
 Bot.on("polling_error", (msg) => console.log(msg));
+
+Http.createServer((req, res) => {
+  res.write(`<html><head>${BOT_USRNAME}</head><body><h1>started: ${BOT_NAME}: ${BOT_USRNAME}</h1></body></html>`);
+  res.end();
+}).listen(process.env.PORT || 8080);
