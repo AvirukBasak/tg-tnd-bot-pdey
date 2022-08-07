@@ -13,13 +13,28 @@ const Bot = new TelegramBot(TOKEN, { polling: true });
 // global variables
 const CODEBLOCK = "```";
 
+// DEBUG flag
+const DEBUG = [];
+
 // object to store all data about chats and usernames
 const Obj = {};
 
 function sendMsg(chatid, msg)
 {
+    if (DEBUG.includes(chatid))
+        console.log("reply: " + chatid + ": " + msg);
     Bot.sendMessage(chatid, msg, { parse_mode: "markdown" });
 }
+
+Bot.onText(/\/debug/, (msg, match) => {
+    if (!DEBUG.includes("" + msg.chat.id)) {
+        DEBUG.push("" + msg.chat.id);
+        sendMsg(msg.chat.id, "Turned ON debug mode");
+    } else {
+        DEBUG.splice(DEBUG.indexOf("" + msg.chat.id), 1);
+        sendMsg(msg.chat.id, "Turned OFF debug mode");
+    }
+});
 
 Bot.onText(/\/msginf(.*)/, (msg, match) => {
     if (msg.from.is_bot)
