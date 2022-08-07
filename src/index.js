@@ -173,6 +173,6 @@ Bot.onText(/\/about\@(.+)/, (msg, match) => {
 Bot.on("polling_error", (msg) => console.log(msg));
 
 Http.createServer((req, res) => {
-  res.write(`<html><head>${BOT_USRNAME}</head><body><h1>started: ${BOT_NAME}: ${BOT_USRNAME}</h1></body></html>`);
+  res.write(`<html><head><title>${BOT_USRNAME}</title></head><body><h1>started: ${BOT_NAME}: ${BOT_USRNAME}</h1></body></html>`);
   res.end();
 }).listen(process.env.PORT || 8080);
