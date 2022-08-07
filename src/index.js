@@ -95,8 +95,9 @@ Bot.onText(/\/leave/, (msg, match) => {
         sendMsg(msg.chat.id, `You need to /start the game before you can /leave`);
         return;
     }
+    const players = Obj["" + msg.chat.id].players;
     const player = msg.from.username;
-    if (Obj["" + msg.chat.id].players.includes(player)) {
+    if (players.includes(player)) {
         Obj["" + msg.chat.id].players.splice(players.indexOf(player), 1);
     } else {
         sendMsg(msg.chat.id, `@${player}, you aren't in the game!`);
@@ -116,7 +117,7 @@ Bot.onText(/\/list/, (msg, match) => {
         sendMsg(msg.chat.id, `There're no participants`);
         return;
     }
-    const reply = "### Usernames of participants:";
+    let reply = "### Usernames of participants:";
     for (const player of Obj["" + msg.chat.id].players) {
         reply += `- ${player}\n`;
     }
