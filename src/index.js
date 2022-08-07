@@ -3,7 +3,7 @@ const token = process.env.AUTH_TOKEN;
 
 const bot = new TelegramBot(token, { polling:true });
 
-bot.onText('message', (msg) => {
+bot.onText(/\/msginf/, (msg, match) => {
     // console.log(msg);
     const codeblock = "```";
     bot.sendMessage(msg.chat.id, `${codeblock}${JSON.stringify(msg, null, 2)}${codeblock}`);
