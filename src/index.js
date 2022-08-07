@@ -19,24 +19,29 @@ function sendMsg(chatid, msg)
     Bot.sendMessage(chatid, msg, { parse_mode: "markdown" });
 }
 
-Bot.onText(/\/msginf (.+)/, (msg, match) => {
+Bot.onText(/\/msginf(.*)/, (msg, match) => {
     if (msg.from.is_bot)
         return;
-    if (match[0] !== MASTER_PASSWD) {
+    if (match[1] !== " " + MASTER_PASSWD) {
         sendMsg("Command /msginf requires `MASTER_PASSWD` as argument");
         return;
     }
+    console.log("m0: " + match[0]);
+    console.log("m1: " + match[1]);
     sendMsg(
         msg.chat.id,
         `${CODEBLOCK}${JSON.stringify(msg, null, 2)}${CODEBLOCK}`
     );
 });
 
-Bot.onText(/\/help@(.+)/, (msg, match) => {
+Bot.onText(/\/help\@(.+)/, (msg, match) => {
     if (msg.from.is_bot)
         return;
-    if (match[0] !== BOT_USRNAME)
+    if (match[1] !== BOT_USRNAME) {
+        console.log("m0: " + match[0]);
+        console.log("m1: " + match[1]);
         return;
+    }
     const reply = (
         "Commands:\n"
         + "  /help  -- Display this message\n"
@@ -51,11 +56,14 @@ Bot.onText(/\/help@(.+)/, (msg, match) => {
     sendMsg(msg.chat.id, reply);
 });
 
-Bot.onText(/\/start@(.+)/, (msg, match) => {
+Bot.onText(/\/start\@(.+)/, (msg, match) => {
     if (msg.from.is_bot)
         return;
-    if (match[0] !== BOT_USRNAME)
+    if (match[1] !== BOT_USRNAME) {
+        console.log("m0: " + match[0]);
+        console.log("m1: " + match[1]);
         return;
+    }
     Obj["" + msg.chat.id] = {
         players: [],
         round: 0
@@ -139,24 +147,30 @@ Bot.onText(/\/spin/, (msg, match) => {
     sendMsg(msg.chat.id, reply);
 });
 
-Bot.onText(/\/stop@(.+)/, (msg, match) => {
+Bot.onText(/\/stop\@(.+)/, (msg, match) => {
     if (msg.from.is_bot)
         return;
     if (!Obj["" + msg.chat.id]?.players) {
         sendMsg(msg.chat.id, `You need to /start the game before you can /stop`);
         return;
     }
-    if (match[0] !== BOT_USRNAME)
+    if (match[1] !== BOT_USRNAME) {
+        console.log("m0: " + match[0]);
+        console.log("m1: " + match[1]);
         return;
+    }
     delete Obj["" + msg.chat.id];
     sendMsg(msg.chat.id, `@${BOT_USRNAME} has stopped listening!`);
 });
 
-Bot.onText(/\/about@(.+)/, (msg, match) => {
+Bot.onText(/\/about\@(.+)/, (msg, match) => {
     if (msg.from.is_bot)
         return;
-    if (match[0] !== BOT_USRNAME)
+    if (match[1] !== BOT_USRNAME) {
+        console.log("m0: " + match[0]);
+        console.log("m1: " + match[1]);
         return;
+    }
     const reply = (
         `Bot @${BOT_USRNAME}:`
         + "sources: https://github.com/AvirukBasak/tg-tnd-bot-pdey\n"
