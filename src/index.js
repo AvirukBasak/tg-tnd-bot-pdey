@@ -203,8 +203,8 @@ Bot.onText(/^\/about(.*)/, (msg, match) => {
         return;
     const reply = (
         `Bot: ${BOT_NAME}:\n`
-        + "  Sources: https://github.com/AvirukBasak/tg-tnd-bot-pdey\n"
-        + "  License: MIT"
+        + "Sources: https://github.com/AvirukBasak/tg-tnd-bot-pdey\n"
+        + "License: MIT"
     );
     sendMsg(msg.chat.id, reply);
 });
