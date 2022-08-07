@@ -3,9 +3,11 @@ const Http = require('http');
 
 // load environment variables
 const TOKEN = process.env.AUTH_TOKEN;
+const APP_URL = process.env.APP_URL;
 const BOT_NAME = process.env.BOT_NAME;
 const BOT_USRNAME = process.env.BOT_USRNAME;
 const MASTER_PASSWD = process.env.MASTER_PASSWD;
+const SELF_REQ_TIMELIM = number(process.env.SELF_REQ_TIMELIM);
 
 // create bot
 const Bot = new TelegramBot(TOKEN, { polling: true });
@@ -228,3 +230,8 @@ Http.createServer((req, res) => {
   res.write(`<html><head><title>${BOT_USRNAME}</title></head><body><h1 style="font-family: monospace">started: ${BOT_NAME}: ${BOT_USRNAME}</h1></body></html>`);
   res.end();
 }).listen(process.env.PORT || 8080);
+
+// recursive request every < 5 minutes (SELF_REQ_TIMELIM)
+setInterval(function() {
+    Http.get(APP_URL);
+}, SELF_REQ_TIMELIM);
