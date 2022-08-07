@@ -13,6 +13,19 @@ const Bot = new TelegramBot(TOKEN, { polling: true });
 // global variables
 const CODEBLOCK = "```";
 
+// help text
+const HELP_TXT = (
+    "Commands:\n"
+    + "  /help - Display this message\n"
+    + "  /start - Listen to this chat\n"
+    + "  /join - Join game\n"
+    + "  /list - List players\n"
+    + "  /spin - Select two randomly\n"
+    + "  /leave - Leave game\n"
+    + "  /stop - Stop listening\n"
+    + "  /about - Sources"
+);
+
 // DEBUG flag
 const DEBUG = [];
 
@@ -22,11 +35,11 @@ const Obj = {};
 function sendMsg(chatid, msg)
 {
     if (DEBUG.includes("" + chatid))
-        console.log("reply: " + chatid + ": " + msg);
+        console.log("reply: " + chatid + ": " + msg.replace(/\n/g, "; "));
     Bot.sendMessage(chatid, msg, { parse_mode: "markdown" });
 }
 
-Bot.onText(/\/debug/, (msg, match) => {
+Bot.onText(/^\/debug/, (msg, match) => {
     if (!DEBUG.includes("" + msg.chat.id)) {
         DEBUG.push("" + msg.chat.id);
         sendMsg(msg.chat.id, "Turned ON debug mode");
@@ -36,10 +49,8 @@ Bot.onText(/\/debug/, (msg, match) => {
     }
 });
 
-Bot.onText(/\/msginf(.*)/, (msg, match) => {
+Bot.onText(/^\/msginfo/, (msg, match) => {
     if (msg.from.is_bot)
-        return;
-    if (match[1] !== " " + MASTER_PASSWD)
         return;
     sendMsg(
         msg.chat.id,
@@ -47,29 +58,22 @@ Bot.onText(/\/msginf(.*)/, (msg, match) => {
     );
 });
 
-Bot.onText(/\/help\@(.+)/, (msg, match) => {
+Bot.onText(/^\/help(.*)/, (msg, match) => {
     if (msg.from.is_bot)
         return;
-    if (match[1] !== BOT_USRNAME)
+    if (msg.chat.type !== "private" && match[1] !== `@${BOT_USRNAME}`)
         return;
-    const reply = (
-        "Commands:\n"
-        + "  /help - Display this message\n"
-        + "  /start - Listen to this chat\n"
-        + "  /join - Join game\n"
-        + "  /list - List players\n"
-        + "  /spin - Select two randomly\n"
-        + "  /leave - Leave game\n"
-        + "  /stop - Stop listening\n"
-        + "  /about - Sources"
-    );
-    sendMsg(msg.chat.id, reply);
+    sendMsg(msg.chat.id, HELP_TXT);
 });
 
-Bot.onText(/\/start\@(.+)/, (msg, match) => {
+Bot.onText(/^\/start(.*)/, (msg, match) => {
     if (msg.from.is_bot)
         return;
-    if (match[1] !== BOT_USRNAME)
+    if (msg.chat.type === "private") {
+        sendMsg(msg.chat.id, "Start the bot service by visiting https://tg-tnd-bot-pdey.herokuapp.com\n\n" + HELP_TXT);
+        return;
+    }
+    if (match[1] !== `@${BOT_USRNAME}`)
         return;
     if (Obj["" + msg.chat.id]?.players) {
         sendMsg(msg.chat.id, `Game has already started!`);
@@ -82,9 +86,13 @@ Bot.onText(/\/start\@(.+)/, (msg, match) => {
     sendMsg(msg.chat.id, `${BOT_NAME} has started listening!`);
 });
 
-Bot.onText(/\/join/, (msg, match) => {
+Bot.onText(/^\/join/, (msg, match) => {
     if (msg.from.is_bot)
         return;
+    if (msg.chat.type === "private") {
+        sendMsg(msg.chat.id, "Truth n Dare should be played in a Group of friends!");
+        return;
+    }
     if (!Obj["" + msg.chat.id]?.players) {
         sendMsg(msg.chat.id, `You need to /start the game before you can /join`);
         return;
@@ -99,9 +107,13 @@ Bot.onText(/\/join/, (msg, match) => {
     sendMsg(msg.chat.id, `\@${player} has joined the game!`);
 });
 
-Bot.onText(/\/leave/, (msg, match) => {
+Bot.onText(/^\/leave/, (msg, match) => {
     if (msg.from.is_bot)
         return;
+    if (msg.chat.type === "private") {
+        sendMsg(msg.chat.id, "Truth n Dare should be played in a Group of friends!");
+        return;
+    }
     if (!Obj["" + msg.chat.id]?.players) {
         sendMsg(msg.chat.id, `You need to /start the game before you can /leave`);
         return;
@@ -117,9 +129,13 @@ Bot.onText(/\/leave/, (msg, match) => {
     sendMsg(msg.chat.id, `\@${player} has left the game`);
 });
 
-Bot.onText(/\/list/, (msg, match) => {
+Bot.onText(/^\/list/, (msg, match) => {
     if (msg.from.is_bot)
         return;
+    if (msg.chat.type === "private") {
+        sendMsg(msg.chat.id, "Truth n Dare should be played in a Group of friends!");
+        return;
+    }
     if (!Obj["" + msg.chat.id]?.players) {
         sendMsg(msg.chat.id, `You need to /start the game before you can /list`);
         return;
@@ -135,9 +151,13 @@ Bot.onText(/\/list/, (msg, match) => {
     sendMsg(msg.chat.id, reply);
 });
 
-Bot.onText(/\/spin/, (msg, match) => {
+Bot.onText(/^\/spin/, (msg, match) => {
     if (msg.from.is_bot)
         return;
+    if (msg.chat.type === "private") {
+        sendMsg(msg.chat.id, "Truth n Dare should be played in a Group of friends!");
+        return;
+    }
     if (!Obj["" + msg.chat.id]?.players) {
         sendMsg(msg.chat.id, `You need to /start the game before you can /spin`);
         return;
@@ -159,28 +179,32 @@ Bot.onText(/\/spin/, (msg, match) => {
     sendMsg(msg.chat.id, reply);
 });
 
-Bot.onText(/\/stop\@(.+)/, (msg, match) => {
+Bot.onText(/^\/stop(.*)/, (msg, match) => {
     if (msg.from.is_bot)
         return;
+    if (msg.chat.type === "private") {
+        sendMsg(msg.chat.id, "Truth n Dare should be played in a Group of friends!");
+        return;
+    }
     if (!Obj["" + msg.chat.id]?.players) {
         sendMsg(msg.chat.id, `You need to /start the game before you can /stop`);
         return;
     }
-    if (match[1] !== BOT_USRNAME)
+    if (match[1] !== `@${BOT_USRNAME}`)
         return;
     delete Obj["" + msg.chat.id];
     sendMsg(msg.chat.id, `${BOT_NAME} has stopped listening!`);
 });
 
-Bot.onText(/\/about\@(.+)/, (msg, match) => {
+Bot.onText(/^\/about(.*)/, (msg, match) => {
     if (msg.from.is_bot)
         return;
-    if (match[1] !== BOT_USRNAME)
+    if (msg.chat.type !== "private" && match[1] !== `@${BOT_USRNAME}`)
         return;
     const reply = (
         `Bot: ${BOT_NAME}:\n`
-        + "sources: https://github.com/AvirukBasak/tg-tnd-bot-pdey\n"
-        + "license: MIT"
+        + "  Sources: https://github.com/AvirukBasak/tg-tnd-bot-pdey\n"
+        + "  License: MIT"
     );
     sendMsg(msg.chat.id, reply);
 });
@@ -192,6 +216,6 @@ Bot.on("polling_error", (msg) => {
 });
 
 Http.createServer((req, res) => {
-  res.write(`<html><head><title>${BOT_USRNAME}</title></head><body><h1>started: ${BOT_NAME}: ${BOT_USRNAME}</h1></body></html>`);
+  res.write(`<html><head><title>${BOT_USRNAME}</title></head><body><h1 style="font-family: monospace">started: ${BOT_NAME}: ${BOT_USRNAME}</h1></body></html>`);
   res.end();
 }).listen(process.env.PORT || 8080);
