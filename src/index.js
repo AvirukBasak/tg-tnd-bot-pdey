@@ -71,8 +71,8 @@ Bot.onText(/\/join/, (msg, match) => {
         return;
     }
     const player = msg.from.username;
-    if (!Obj["" + msg.chat.id].players.includes(player)]) {
-        Obj["" + msg.chat.id].players.append(player);
+    if (!Obj["" + msg.chat.id].players.includes(player)) {
+        Obj["" + msg.chat.id].players.push(player);
     } else {
         sendMsg(msg.chat.id, `@${player}, you're already in the game!`);
         return;
@@ -88,7 +88,7 @@ Bot.onText(/\/leave/, (msg, match) => {
         return;
     }
     const player = msg.from.username;
-    if (Obj["" + msg.chat.id].players.includes(player)]) {
+    if (Obj["" + msg.chat.id].players.includes(player)) {
         Obj["" + msg.chat.id].players.splice(players.indexOf(player), 1);
     } else {
         sendMsg(msg.chat.id, `@${player}, you aren't in the game!`);
