@@ -1,18 +1,11 @@
-process.env.NTBA_FIX_319 = 1;
 const TelegramBot = require('node-telegram-bot-api');
-const Agent = require('socks5-https-client/lib/Agent');
 const token = process.env.AUTH_TOKEN;
 
-const bot = new TelegramBot(token, {polling:true,request:{
-    agentClass: Agent,
-    agentOptions: {
-        socksHost: process.env.SOCKS5_HOST
-        socksPort: process.env.SOCKS5_PORT
-    }
-}});
+const bot = new TelegramBot(token, { polling:true });
 
 bot.on('message', (msg) => {
-    bot.sendMessage(msg.chat.id, "hello");
+    console.log(msg);
+    bot.sendMessage(msg.chat.id, "hello, I recieved msg from you");
 });
 
 bot.on("polling_error", (msg) => console.log(msg));
