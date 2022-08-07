@@ -171,7 +171,7 @@ Bot.onText(/\/about\@(.+)/, (msg, match) => {
 });
 
 Bot.on("polling_error", (msg) => {
-    console.log(JSON.stringify(msg));
+    return;
 });
 
 Http.createServer((req, res) => {
