@@ -44,8 +44,7 @@ const Obj = {};
 
 function logComm(msg)
 {
-    if (msg.entities.type === "bot_command" && msg.text[0] === "/")
-        console.log(`COM: ${msg.message_id ^ msg.chat.id}: ${msg.text.replace(/\n/g, "; ")}`);
+    console.log(`COM: ${msg.message_id ^ msg.chat.id}: ${msg.text.replace(/\n/g, "; ")}`);
 }
 
 function sendMsg(chatid, msg)
@@ -252,7 +251,7 @@ Http.createServer((req, res) => {
       + '  </title>\n'
       + '  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, minimum-scale=1.0">\n'
       + '  <style>\n'
-      + '    *, html, body, {\n'
+      + '    * {\n'
       + '      font-family: monospace;\n'
       + '    }\n'
       + '  </style>\n'
@@ -270,4 +269,5 @@ Http.createServer((req, res) => {
 // reload certain variables every VAR_RELOAD_INTERVAL ms
 setInterval(() => {
     Obj = {};
+    console.log(`RLOAD: after ${VAR_RELOAD_INTERVAL} ms`);
 }, VAR_RELOAD_INTERVAL);
