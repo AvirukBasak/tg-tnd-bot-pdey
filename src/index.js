@@ -6,8 +6,8 @@ const TOKEN = process.env.AUTH_TOKEN;
 const APP_URL = process.env.APP_URL;
 const BOT_NAME = process.env.BOT_NAME;
 const BOT_USRNAME = process.env.BOT_USRNAME;
-const MASTER_PASSWD = process.env.MASTER_PASSWD;
-const SELF_REQ_TIMELIM = Number(process.env.SELF_REQ_TIMELIM);
+let MASTER_PASSWD = process.env.MASTER_PASSWD;
+let VAR_RELOAD_INTERVAL = Number(process.env.VAR_RELOAD_INTERVAL);
 
 // create bot
 const Bot = new TelegramBot(TOKEN, { polling: true });
@@ -42,6 +42,12 @@ const DEBUG = [];
 // object to store all data about chats and usernames
 const Obj = {};
 
+function logComm(msg)
+{
+    if (msg.entities.type === "bot_command" && msg.text[0] === "/")
+        console.log(`COM: ${msg.message_id ^ msg.chat.id}: ${msg.text.replace(/\n/g, "; ")}`);
+}
+
 function sendMsg(chatid, msg)
 {
     if (DEBUG.includes("" + chatid))
@@ -50,12 +56,14 @@ function sendMsg(chatid, msg)
 }
 
 Bot.onText(/^\/dev/, (msg, match) => {
+    logComm(msg);
     if (msg.from.is_bot)
         return;
     sendMsg(msg.chat.id, DEV_CMD);
 });
 
 Bot.onText(/^\/debug/, (msg, match) => {
+    logComm(msg);
     if (!DEBUG.includes("" + msg.chat.id)) {
         DEBUG.push("" + msg.chat.id);
         sendMsg(msg.chat.id, "Turned ON debug mode");
@@ -66,6 +74,7 @@ Bot.onText(/^\/debug/, (msg, match) => {
 });
 
 Bot.onText(/^\/msginfo/, (msg, match) => {
+    logComm(msg);
     if (msg.from.is_bot)
         return;
     Bot.sendMessage(
@@ -76,12 +85,14 @@ Bot.onText(/^\/msginfo/, (msg, match) => {
 });
 
 Bot.onText(/^\/help/, (msg, match) => {
+    logComm(msg);
     if (msg.from.is_bot)
         return;
     sendMsg(msg.chat.id, HELP_TXT);
 });
 
 Bot.onText(/^\/start/, (msg, match) => {
+    logComm(msg);
     if (msg.from.is_bot)
         return;
     if (msg.chat.type === "private") {
@@ -100,6 +111,7 @@ Bot.onText(/^\/start/, (msg, match) => {
 });
 
 Bot.onText(/^\/join/, (msg, match) => {
+    logComm(msg);
     if (msg.from.is_bot)
         return;
     if (msg.chat.type === "private") {
@@ -121,6 +133,7 @@ Bot.onText(/^\/join/, (msg, match) => {
 });
 
 Bot.onText(/^\/leave/, (msg, match) => {
+    logComm(msg);
     if (msg.from.is_bot)
         return;
     if (msg.chat.type === "private") {
@@ -143,6 +156,7 @@ Bot.onText(/^\/leave/, (msg, match) => {
 });
 
 Bot.onText(/^\/list/, (msg, match) => {
+    logComm(msg);
     if (msg.from.is_bot)
         return;
     if (msg.chat.type === "private") {
@@ -165,6 +179,7 @@ Bot.onText(/^\/list/, (msg, match) => {
 });
 
 Bot.onText(/^\/spin/, (msg, match) => {
+    logComm(msg);
     if (msg.from.is_bot)
         return;
     if (msg.chat.type === "private") {
@@ -195,6 +210,7 @@ Bot.onText(/^\/spin/, (msg, match) => {
 });
 
 Bot.onText(/^\/stop/, (msg, match) => {
+    logComm(msg);
     if (msg.from.is_bot)
         return;
     if (msg.chat.type === "private") {
@@ -210,6 +226,7 @@ Bot.onText(/^\/stop/, (msg, match) => {
 });
 
 Bot.onText(/^\/about/, (msg, match) => {
+    logComm(msg);
     if (msg.from.is_bot)
         return;
     const reply = (
@@ -227,6 +244,30 @@ Bot.on("polling_error", (msg) => {
 });
 
 Http.createServer((req, res) => {
-  res.write(`<html><head><title>${BOT_USRNAME}</title></head><body><h1 style="font-family: monospace">started: ${BOT_NAME}: ${BOT_USRNAME}</h1></body></html>`);
+  res.write(
+        '<html>\n'
+      + '<head>\n'
+      + '  <title>\n'
+      + `    ${BOT_USRNAME}\n`
+      + '  </title>\n'
+      + '  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, minimum-scale=1.0">\n'
+      + '  <style>\n'
+      + '    *, html, body, {\n'
+      + '      font-family: monospace;\n'
+      + '    }\n'
+      + '  </style>\n'
+      + '</head>\n'
+      + '<body>\n'
+      + '  <h1>\n'
+      + `    started: ${BOT_NAME}: ${BOT_USRNAME}\n`
+      + '  </h1>\n'
+      + '</body>\n'
+      + '</html>\n'
+  );
   res.end();
 }).listen(process.env.PORT || 8080);
+
+// reload certain variables every VAR_RELOAD_INTERVAL ms
+setInterval(() => {
+    Obj = {};
+}, VAR_RELOAD_INTERVAL);
