@@ -40,7 +40,7 @@ const DEV_CMD = (
 const DEBUG = [];
 
 // object to store all data about chats and usernames
-const Obj = {};
+let Obj = {};
 
 function logComm(msg)
 {
