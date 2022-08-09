@@ -257,9 +257,9 @@ Http.createServer((req, res) => {
       + '  </style>\n'
       + '</head>\n'
       + '<body>\n'
-      + '  <h1>\n'
+      + '  <h2>\n'
       + `    started: ${BOT_NAME}: ${BOT_USRNAME}\n`
-      + '  </h1>\n'
+      + '  </h2>\n'
       + '</body>\n'
       + '</html>\n'
   );
