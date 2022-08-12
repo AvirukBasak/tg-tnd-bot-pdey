@@ -90,7 +90,7 @@ Bot.onText(/^\/clnlog(.*)/, (msg, match) => {
     } else {
         sendMsg(msg.message_id, msg.chat.id, "Authentication failure. This incident will be reported.");
         logComm(msg);
-        console.log(`AUTHN: clnlog: entered password: '${match[1].substring(1)}'`);
+        console.log(`AUTHN: ${msg.message_id ^ msg.chat.id}: /clnlog: entered password = '${match[1].substring(1)}'`);
         return;
     }
     logComm(msg);
