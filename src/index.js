@@ -44,9 +44,8 @@ const NOTES = (
     + "Sources: https://github.com/AvirukBasak/tg-tnd-bot-pdey\n"
     + "License: MIT\n\n" +
     "Notes:\n\n"
-    + "The above list doesn't contain four commands. Out of which, the `debug` command should be avoided.\n\n"
-    + "The `debug` command logs replies from the bot and player usernames become visible to the server admin.\n\n"
-    + "Data regarding games and debug states reset 4 times a day. Upside is, any unlogged data is cleared. Downside is, a running game may get abruptly stopped.\n\n" +
+    + "The `debug` command should be avoided. The `debug` command logs replies from the bot and player usernames become visible to the server admin.\n\n"
+    + "Data regarding games and debug states reset " + Math.floor(24 / ((VAR_RELOAD_INTERVAL / 1000 / 3600))) + " times a day. Upside is, any unlogged data is cleared. Downside is, a running game may get abruptly stopped.\n\n" +
     "Data Collection:\n\n"
     + "Every time a valid command is run, a hash of chat ID and message ID along with the name of that command is logged. This data helps server admin understand how much the bot is used.\n\n"
     + "Data collected doesn't provide information about the users or groups.\n\n"
