@@ -7,6 +7,7 @@ const APP_URL = process.env.APP_URL;
 const BOT_NAME = process.env.BOT_NAME;
 const BOT_USRNAME = process.env.BOT_USRNAME;
 const MASTER_PASSWD = process.env.MASTER_PASSWD;
+const HEROKU_RELEASE_VERSION = process.env.HEROKU_RELEASE_VERSION;
 const VAR_RELOAD_INTERVAL = Number(process.env.VAR_RELOAD_INTERVAL);
 
 // create bot
@@ -41,7 +42,7 @@ const DEV_CMD = (
 
 // info
 const NOTES = (
-    `${BOT_NAME}:\n\n`
+    `${BOT_NAME} ${HEROKU_RELEASE_VERSION}:\n\n`
     + "Sources: https://github.com/AvirukBasak/tg-tnd-bot-pdey\n"
     + "License: MIT\n\n" +
     "Notes:\n\n"
@@ -315,7 +316,7 @@ Http.createServer((req, res) => {
         '<html>\n'
       + '<head>\n'
       + '  <title>\n'
-      + `    ${BOT_USRNAME}\n`
+      + `    ${BOT_USRNAME} ${HEROKU_RELEASE_VERSION}\n`
       + '  </title>\n'
       + '  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, minimum-scale=1.0">\n'
       + '  <style>\n'
@@ -327,7 +328,7 @@ Http.createServer((req, res) => {
       + '</head>\n'
       + '<body>\n'
       + '  <p>\n'
-      + `    online: ${BOT_NAME}: ${BOT_USRNAME}\n`
+      + `    online: ${BOT_NAME}: ${BOT_USRNAME}: ${HEROKU_RELEASE_VERSION}\n`
       + '  </p>\n'
       + '</body>\n'
       + '</html>\n'
