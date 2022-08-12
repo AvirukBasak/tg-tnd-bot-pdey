@@ -112,6 +112,17 @@ Bot.onText(/^\/msginfo/, (msg, match) => {
     );
 });
 
+Bot.onText(/^\/chatinfo/, (msg, match) => {
+    logComm(msg);
+    if (msg.from.is_bot)
+        return;
+    Bot.sendMessage(
+        msg.chat.id,
+        `${CODEBLOCK}${JSON.stringify(Obj["" + msg.chat.id], null, 2)}${CODEBLOCK}`,
+        { parse_mode: "markdown" }
+    );
+});
+
 Bot.onText(/^\/help/, (msg, match) => {
     logComm(msg);
     if (msg.from.is_bot)
