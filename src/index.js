@@ -120,7 +120,7 @@ Bot.onText(/^\/chatinfo/, (msg, match) => {
         return;
     Bot.sendMessage(
         msg.chat.id,
-        `${CODEBLOCK}${JSON.stringify(Obj["" + msg.chat.id], null, 2)}${CODEBLOCK}`,
+        `${CODEBLOCK}{${JSON.stringify(Obj["" + msg.chat.id], null, 2)}${CODEBLOCK}`,
         { parse_mode: "markdown" }
     );
 });
