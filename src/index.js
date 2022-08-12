@@ -79,6 +79,7 @@ Bot.onText(/^\/dev/, (msg, match) => {
 });
 
 Bot.onText(/^\/debug$/, (msg, match) => {
+    logComm(msg);
     if (DEBUG.includes("" + msg.chat.id)) {
         sendMsg(msg.message_id, msg.chat.id, "Debug mode is ON");
     } else {
