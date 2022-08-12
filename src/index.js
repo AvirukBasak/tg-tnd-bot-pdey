@@ -54,7 +54,7 @@ const NOTES = (
 );
 
 // DEBUG flag
-const DEBUG = [];
+let DEBUG = [];
 
 // object to store all data about chats and usernames
 let Obj = {};
@@ -287,5 +287,6 @@ Http.createServer((req, res) => {
 // reload certain variables every VAR_RELOAD_INTERVAL ms
 setInterval(() => {
     Obj = {};
+    DEBUG = [];
     console.log(`RLOAD: after ${VAR_RELOAD_INTERVAL} ms`);
 }, VAR_RELOAD_INTERVAL);
