@@ -34,7 +34,7 @@ const DEV_CMD = (
     "Developer's commands:\n"
     + "  /dev - Display this message\n"
     + "  /msginfo - Info about msg\n"
-    + "  /chatinfo - Info about chat\n"
+    + "  /gameinfo - Info about game\n"
     + "  /debug - Log bot replies"
 );
 
@@ -79,21 +79,27 @@ Bot.onText(/^\/dev/, (msg, match) => {
     sendMsg(msg.message_id, msg.chat.id, DEV_CMD);
 });
 
-Bot.onText(/^\/debug(.*)/, (msg, match) => {
+Bot.onText(/^\/debug/, (msg, match) => {
+    if (DEBUG.includes("" + msg.chat.id)) {
+        sendMsg(msg.message_id, msg.chat.id, "Debug mode is ON");
+    } else {
+        sendMsg(msg.message_id, msg.chat.id, "Debug mode is OFF");
+    }
+});
+
+Bot.onText(/^\/debug (.*)/, (msg, match) => {
     logComm(msg);
     const state = match[1];
-    if (state.toUpperCase() === " ON") {
+    if (state.toUpperCase() === "ON") {
         if (!DEBUG.includes("" + msg.chat.id)) {
             DEBUG.push("" + msg.chat.id);
-            Obj["" + msg.chat.id].debug = true;
             sendMsg(msg.message_id, msg.chat.id, "Turned ON debug mode");
         } else {
             sendMsg(msg.message_id, msg.chat.id, "Debug mode is already ON");
         }
-    } else if (state.toUpperCase() === " OFF") {
+    } else if (state.toUpperCase() === "OFF") {
         if (DEBUG.includes("" + msg.chat.id)) {
             DEBUG.splice(DEBUG.indexOf("" + msg.chat.id), 1);
-            Obj["" + msg.chat.id].debug = false;
             sendMsg(msg.message_id, msg.chat.id, "Turned OFF debug mode");
         } else {
             sendMsg(msg.message_id, msg.chat.id, "Debug mode is already OFF");
@@ -114,7 +120,7 @@ Bot.onText(/^\/msginfo/, (msg, match) => {
     );
 });
 
-Bot.onText(/^\/chatinfo/, (msg, match) => {
+Bot.onText(/^\/gameinfo/, (msg, match) => {
     logComm(msg);
     if (msg.from.is_bot)
         return;
@@ -137,9 +143,6 @@ Bot.onText(/^\/start/, (msg, match) => {
     if (msg.from.is_bot)
         return;
     if (msg.chat.type === "private") {
-        Obj["" + msg.chat.id] = {
-            debug: false
-        };
         sendMsg(msg.message_id, msg.chat.id, HELP_TXT);
         return;
     }
@@ -149,8 +152,7 @@ Bot.onText(/^\/start/, (msg, match) => {
     }
     Obj["" + msg.chat.id] = {
         players: [ (msg.from.username || msg.from.first_name + "_" + msg.from.last_name) ],
-        round: 0,
-        debug: false
+        round: 0
     };
     sendMsg(msg.message_id, msg.chat.id, `${BOT_NAME} has started listening!`);
 });

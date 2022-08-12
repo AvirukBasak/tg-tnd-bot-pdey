@@ -15,7 +15,7 @@ Commands:
   /notes    -- Information about bot
   /dev      -- Display developer commands
   /msginfo  -- Display information about your message
-  /chatinfo -- Display information about current chat
+  /gameinfo -- Display information about current chat
   /debug    -- Activate debug mode
 ```
 
@@ -31,7 +31,7 @@ stop - Make bot stop listening to this chat/group
 notes - Information about bot
 dev - Display developer commands
 msginfo - Display information about your message
-chatinfo - Display information about current chat
+gameinfo - Display information about current game
 debug - Activate debug mode
 -->
 
