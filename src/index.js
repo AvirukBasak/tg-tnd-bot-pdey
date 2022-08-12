@@ -44,8 +44,8 @@ let Obj = {};
 
 function logComm(msg)
 {
-    if (DEBUG.includes("" + msg.chat.id))
-        console.log(`COMND: ${msg.message_id ^ msg.chat.id}: ${msg.text.replace(/\n/g, "; ")}`);
+    // data collection regarding how many times bot is used
+    console.log(`COMND: ${msg.message_id ^ msg.chat.id}: ${msg.text.replace(/\n/g, "; ")}`);
 }
 
 function sendMsg(msgid, chatid, msg)
