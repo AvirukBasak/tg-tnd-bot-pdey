@@ -32,6 +32,7 @@ const HELP_TXT = (
 // developer commands
 const DEV_CMD = (
     "Developer's commands:\n"
+    + "  /dev - Display this message\n"
     + "  /msginfo - Info about msg\n"
     + "  /chatinfo - Info about chat\n"
     + "  /debug - Log bot replies"
