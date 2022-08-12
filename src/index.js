@@ -79,7 +79,7 @@ Bot.onText(/^\/dev/, (msg, match) => {
     sendMsg(msg.message_id, msg.chat.id, DEV_CMD);
 });
 
-Bot.onText(/^\/debug/, (msg, match) => {
+Bot.onText(/^\/debug$/, (msg, match) => {
     if (DEBUG.includes("" + msg.chat.id)) {
         sendMsg(msg.message_id, msg.chat.id, "Debug mode is ON");
     } else {

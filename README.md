@@ -15,7 +15,7 @@ Commands:
   /notes    -- Information about bot
   /dev      -- Display developer commands
   /msginfo  -- Display information about your message
-  /gameinfo -- Display information about current chat
+  /gameinfo -- Display information about current game
   /debug    -- Activate debug mode
 ```
 
