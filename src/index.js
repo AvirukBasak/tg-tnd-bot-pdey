@@ -40,17 +40,17 @@ const DEV_CMD = (
 
 // info
 const NOTES = (
-    `${BOT_NAME}:\n`
+    `**${BOT_NAME}**:\n\n`
     + "Sources: https://github.com/AvirukBasak/tg-tnd-bot-pdey\n"
     + "License: MIT\n\n" +
-    "Notes:\n\n"
+    "**Notes**:\n\n"
     + "The above list doesn't contain four commands. Out of which, the `debug` command should be avoided.\n\n"
     + "The `debug` command logs replies from the bot and player usernames become visible to the server admin.\n\n"
     + "Data regarding games and debug states reset 4 times a day. Upside is, any unlogged data is cleared. Downside is, a running game may get abruptly stopped.\n\n" +
-    "Data Collection:\n\n"
+    "**Data Collection**:\n\n"
     + "Every time a valid command is run, a hash of chat ID and message ID along with the name of that command is logged. This data helps server admin understand how much the bot is used.\n\n"
     + "Data collected doesn't provide information about the users or groups.\n\n"
-    + "For details, visit the link in `Sources` section in /notes."
+    + "For details, visit the link in `Sources` section in /notes.\n"
 );
 
 // DEBUG flag
@@ -79,17 +79,17 @@ Bot.onText(/^\/dev/, (msg, match) => {
     sendMsg(msg.message_id, msg.chat.id, DEV_CMD);
 });
 
-Bot.onText(/^\/debug (ON|OFF|on|off)/, (msg, match) => {
+Bot.onText(/^\/debug(.*)/, (msg, match) => {
     logComm(msg);
     const state = match[1];
-    if (state.toUpperCase() === "ON") {
+    if (state.toUpperCase() === " ON") {
         if (!DEBUG.includes("" + msg.chat.id)) {
             DEBUG.push("" + msg.chat.id);
             sendMsg(msg.message_id, msg.chat.id, "Turned ON debug mode");
         } else {
             sendMsg(msg.message_id, msg.chat.id, "Debug mode is already ON");
         }
-    } else if (state.toUpperCase() === "OFF") {
+    } else if (state.toUpperCase() === " OFF") {
         if (DEBUG.includes("" + msg.chat.id)) {
             DEBUG.splice(DEBUG.indexOf("" + msg.chat.id), 1);
             sendMsg(msg.message_id, msg.chat.id, "Turned OFF debug mode");
