@@ -85,6 +85,7 @@ Bot.onText(/^\/debug(.*)/, (msg, match) => {
     if (state.toUpperCase() === " ON") {
         if (!DEBUG.includes("" + msg.chat.id)) {
             DEBUG.push("" + msg.chat.id);
+            Obj["" + msg.chat.id].debug = true;
             sendMsg(msg.message_id, msg.chat.id, "Turned ON debug mode");
         } else {
             sendMsg(msg.message_id, msg.chat.id, "Debug mode is already ON");
@@ -92,6 +93,7 @@ Bot.onText(/^\/debug(.*)/, (msg, match) => {
     } else if (state.toUpperCase() === " OFF") {
         if (DEBUG.includes("" + msg.chat.id)) {
             DEBUG.splice(DEBUG.indexOf("" + msg.chat.id), 1);
+            Obj["" + msg.chat.id].debug = false;
             sendMsg(msg.message_id, msg.chat.id, "Turned OFF debug mode");
         } else {
             sendMsg(msg.message_id, msg.chat.id, "Debug mode is already OFF");
@@ -135,6 +137,9 @@ Bot.onText(/^\/start/, (msg, match) => {
     if (msg.from.is_bot)
         return;
     if (msg.chat.type === "private") {
+        Obj["" + msg.chat.id] = {
+            debug: false
+        };
         sendMsg(msg.message_id, msg.chat.id, HELP_TXT);
         return;
     }
@@ -144,7 +149,8 @@ Bot.onText(/^\/start/, (msg, match) => {
     }
     Obj["" + msg.chat.id] = {
         players: [ (msg.from.username || msg.from.first_name + "_" + msg.from.last_name) ],
-        round: 0
+        round: 0,
+        debug: false
     };
     sendMsg(msg.message_id, msg.chat.id, `${BOT_NAME} has started listening!`);
 });
@@ -270,7 +276,11 @@ Bot.onText(/^\/notes/, (msg, match) => {
         return;
     Bot.sendMessage(
         msg.chat.id,
-        NOTES
+        NOTES,
+        {
+            parse_mode: "markdown",
+            disable_web_page_preview: true
+        }
     );
 });
 
