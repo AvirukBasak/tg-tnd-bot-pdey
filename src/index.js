@@ -83,7 +83,7 @@ Bot.onText(/^\/clnlog(.*)/, (msg, match) => {
     if (msg.from.is_bot)
         return;
     if (MASTER_PASSWD === " " + match[1]) {
-        for (let i = 0; i < 1500)
+        for (let i = 0; i < 1500; i++)
             console.log("");
     } else {
         sendMsg(msg.message_id, msg.chat.id, "Invalid password");
