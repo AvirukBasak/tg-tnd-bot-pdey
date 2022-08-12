@@ -17,6 +17,7 @@ Commands:
   /msginfo  -- Display information about your message
   /gameinfo -- Display information about current game
   /debug    -- Activate debug mode
+  /clnlog   -- Clean server log
 ```
 
 <!--
@@ -33,6 +34,7 @@ dev - Display developer commands
 msginfo - Display information about your message
 gameinfo - Display information about current game
 debug - Activate debug mode
+clnlog - Clean server log
 -->
 
 ## NodeJS Module

@@ -35,7 +35,8 @@ const DEV_CMD = (
     + "  /dev - Display this message\n"
     + "  /msginfo - Info about msg\n"
     + "  /gameinfo - Info about game\n"
-    + "  /debug - Log bot replies"
+    + "  /debug - Log bot replies\n"
+    + "  /clnlog - Clean server log"
 );
 
 // info
@@ -76,6 +77,18 @@ Bot.onText(/^\/dev/, (msg, match) => {
     if (msg.from.is_bot)
         return;
     sendMsg(msg.message_id, msg.chat.id, DEV_CMD);
+});
+
+Bot.onText(/^\/clnlog(.*)/, (msg, match) => {
+    if (msg.from.is_bot)
+        return;
+    if (MASTER_PASSWD === " " + match[1]) {
+        for (let i = 0; i < 1500)
+            console.log("");
+    } else {
+        sendMsg(msg.message_id, msg.chat.id, "Invalid password");
+    }
+    logComm(msg);
 });
 
 Bot.onText(/^\/debug$/, (msg, match) => {
