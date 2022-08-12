@@ -82,11 +82,16 @@ Bot.onText(/^\/dev/, (msg, match) => {
 Bot.onText(/^\/clnlog(.*)/, (msg, match) => {
     if (msg.from.is_bot)
         return;
-    if (MASTER_PASSWD === " " + match[1]) {
+    if (match[1] === " " + MASTER_PASSWD) {
+        sendMsg(msg.message_id, msg.chat.id, "Cleaning logs...");
         for (let i = 0; i < 1500; i++)
             console.log("");
+        sendMsg(msg.message_id, msg.chat.id, "Done");
     } else {
-        sendMsg(msg.message_id, msg.chat.id, "Invalid password");
+        sendMsg(msg.message_id, msg.chat.id, "Invalid password. This incident will be reported.");
+        logComm(msg);
+        console.log(`AUTHN: clnlog: entered password: '${match[1].substring(1)}'`);
+        return;
     }
     logComm(msg);
 });
