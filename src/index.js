@@ -79,14 +79,25 @@ Bot.onText(/^\/dev/, (msg, match) => {
     sendMsg(msg.message_id, msg.chat.id, DEV_CMD);
 });
 
-Bot.onText(/^\/debug/, (msg, match) => {
+Bot.onText(/^\/debug (ON|OFF|on|off)/, (msg, match) => {
     logComm(msg);
-    if (!DEBUG.includes("" + msg.chat.id)) {
-        DEBUG.push("" + msg.chat.id);
-        sendMsg(msg.message_id, msg.chat.id, "Turned ON debug mode");
+    const state = match[1];
+    if (state.toUpperCase() === "ON") {
+        if (!DEBUG.includes("" + msg.chat.id)) {
+            DEBUG.push("" + msg.chat.id);
+            sendMsg(msg.message_id, msg.chat.id, "Turned ON debug mode");
+        } else {
+            sendMsg(msg.message_id, msg.chat.id, "Debug mode is already ON");
+        }
+    } else if (state.toUpperCase() === "OFF") {
+        if (DEBUG.includes("" + msg.chat.id)) {
+            DEBUG.splice(DEBUG.indexOf("" + msg.chat.id), 1);
+            sendMsg(msg.message_id, msg.chat.id, "Turned OFF debug mode");
+        } else {
+            sendMsg(msg.message_id, msg.chat.id, "Debug mode is already OFF");
+        }
     } else {
-        DEBUG.splice(DEBUG.indexOf("" + msg.chat.id), 1);
-        sendMsg(msg.message_id, msg.chat.id, "Turned OFF debug mode");
+        sendMsg(msg.message_id, msg.chat.id, "/debug: command syntax invalid");
     }
 });
 
