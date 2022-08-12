@@ -26,14 +26,30 @@ const HELP_TXT = (
     + "  /spin - Select two randomly\n"
     + "  /leave - Leave game\n"
     + "  /stop - Stop listening\n"
-    + "  /about - Sources"
+    + "  /notes - Notes\n\n"
 );
 
 // developer commands
 const DEV_CMD = (
     "Developer's commands:\n"
     + "  /msginfo - Info about msg\n"
-    + "  /debug - Log replies at server"
+    + "  /chatinfo - Info about chat\n"
+    + "  /debug - Log bot replies"
+);
+
+// info
+const NOTES = (
+    `${BOT_NAME}:\n`
+    + "Sources: https://github.com/AvirukBasak/tg-tnd-bot-pdey\n"
+    + "License: MIT\n\n" +
+    "Notes:\n\n"
+    + "The above list doesn't contain four commands. Out of which, the `debug` command should be avoided.\n\n"
+    + "The `debug` command logs replies from the bot and player usernames become visible to the server admin.\n\n"
+    + "Data regarding games and debug states reset 4 times a day. Upside is, any unlogged data is cleared. Downside is, a running game may get abruptly stopped.\n\n" +
+    "Data Collection:\n\n"
+    + "Every time a valid command is run, a hash of chat ID and message ID along with the name of that command is logged. This data helps server admin understand how much the bot is used.\n\n"
+    + "Data collected doesn't provide information about the users or groups.\n\n"
+    + "For details, visit the link in `Sources` section in /notes."
 );
 
 // DEBUG flag
@@ -225,16 +241,15 @@ Bot.onText(/^\/stop/, (msg, match) => {
     sendMsg(msg.message_id, msg.chat.id, `${BOT_NAME} has stopped listening!`);
 });
 
-Bot.onText(/^\/about/, (msg, match) => {
+Bot.onText(/^\/notes/, (msg, match) => {
     logComm(msg);
     if (msg.from.is_bot)
         return;
-    const reply = (
-        `${BOT_NAME}:\n`
-        + "Sources: https://github.com/AvirukBasak/tg-tnd-bot-pdey\n"
-        + "License: MIT"
+    Bot.sendMessage(
+        msg.chat.id,
+        NOTES,
+        { parse_mode: "markdown" }
     );
-    sendMsg(msg.message_id, msg.chat.id, reply);
 });
 
 Bot.on("polling_error", (msg) => {
