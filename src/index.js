@@ -96,13 +96,16 @@ Bot.onText(/^\/clnlog(@.*?bot)?(.*)/, (msg, match) => {
         sendMsg(msg.message_id, msg.chat.id, "Cleaning logs...");
         for (let i = 0; i < 1500; i++)
             console.log("");
-        sendMsg(msg.message_id, msg.chat.id, "Done");
+        setTimeout(() => {
+            sendMsg(msg.message_id, msg.chat.id, "Done");
+        }, 500);
     } else {
         sendMsg(msg.message_id, msg.chat.id, "Authentication failure. This incident will be reported.");
         logComm(msg);
         console.log(`AUTHF: ${msg.message_id ^ msg.chat.id}: /clnlog: entered password = '${match[2].substring(1)}'`);
         return;
     }
+    logComm(msg);
 });
 
 Bot.onText(/^\/debug(@.*?bot)?$/, (msg, match) => {
