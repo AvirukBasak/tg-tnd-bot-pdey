@@ -73,17 +73,26 @@ function sendMsg(msgid, chatid, msg)
     Bot.sendMessage(chatid, msg);
 }
 
-Bot.onText(/^\/dev/, (msg, match) => {
+Bot.onText(/^\/dev(@.*?bot)?/, (msg, match) => {
     logComm(msg);
+    if (msg.chat.type !== "private" && match[1] !== `@${BOT_USRNAME}`)
+        return;
     if (msg.from.is_bot)
         return;
     sendMsg(msg.message_id, msg.chat.id, DEV_CMD);
 });
 
-Bot.onText(/^\/clnlog(.*)/, (msg, match) => {
+Bot.onText(/^\/clnlog(@.*?bot)? (.*)/, (msg, match) => {
     if (msg.from.is_bot)
         return;
-    if (match[1] === " " + MASTER_PASSWD) {
+    if (msg.chat.type !== "private" && match[1] !== `@${BOT_USRNAME}`)
+        return;
+    if (msg.chat.type !== "private" && match[1] === `@${BOT_USRNAME}`) {
+        logComm(msg);
+        sendMsg(msg.message_id, msg.chat.id, "Command needs to be used in private chat.");
+        return;
+    }
+    if (match[2] === MASTER_PASSWD) {
         sendMsg(msg.message_id, msg.chat.id, "Cleaning logs...");
         for (let i = 0; i < 1500; i++)
             console.log("");
@@ -94,11 +103,12 @@ Bot.onText(/^\/clnlog(.*)/, (msg, match) => {
         console.log(`AUTHF: ${msg.message_id ^ msg.chat.id}: /clnlog: entered password = '${match[1].substring(1)}'`);
         return;
     }
-    logComm(msg);
 });
 
-Bot.onText(/^\/debug$/, (msg, match) => {
+Bot.onText(/^\/debug(@.*?bot)?$/, (msg, match) => {
     logComm(msg);
+    if (msg.chat.type !== "private" && match[1] !== `@${BOT_USRNAME}`)
+        return;
     if (DEBUG.includes("" + msg.chat.id)) {
         sendMsg(msg.message_id, msg.chat.id, "Debug mode is ON");
     } else {
@@ -106,9 +116,11 @@ Bot.onText(/^\/debug$/, (msg, match) => {
     }
 });
 
-Bot.onText(/^\/debug (.*)/, (msg, match) => {
+Bot.onText(/^\/debug(@.*?bot)? (.*)/, (msg, match) => {
     logComm(msg);
-    const state = match[1];
+    if (msg.chat.type !== "private" && match[1] !== `@${BOT_USRNAME}`)
+        return;
+    const state = match[2];
     if (state.toUpperCase() === "ON") {
         if (!DEBUG.includes("" + msg.chat.id)) {
             DEBUG.push("" + msg.chat.id);
@@ -128,9 +140,11 @@ Bot.onText(/^\/debug (.*)/, (msg, match) => {
     }
 });
 
-Bot.onText(/^\/msginfo/, (msg, match) => {
+Bot.onText(/^\/msginfo(@.*?bot)?/, (msg, match) => {
     logComm(msg);
     if (msg.from.is_bot)
+        return;
+    if (msg.chat.type !== "private" && match[1] !== `@${BOT_USRNAME}`)
         return;
     Bot.sendMessage(
         msg.chat.id,
@@ -139,9 +153,11 @@ Bot.onText(/^\/msginfo/, (msg, match) => {
     );
 });
 
-Bot.onText(/^\/gameinfo/, (msg, match) => {
+Bot.onText(/^\/gameinfo(@.*?bot)?/, (msg, match) => {
     logComm(msg);
     if (msg.from.is_bot)
+        return;
+    if (msg.chat.type !== "private" && match[1] !== `@${BOT_USRNAME}`)
         return;
     Bot.sendMessage(
         msg.chat.id,
@@ -150,16 +166,20 @@ Bot.onText(/^\/gameinfo/, (msg, match) => {
     );
 });
 
-Bot.onText(/^\/help/, (msg, match) => {
+Bot.onText(/^\/help(@.*?bot)?/, (msg, match) => {
     logComm(msg);
+    if (msg.chat.type !== "private" && match[1] !== `@${BOT_USRNAME}`)
+        return;
     if (msg.from.is_bot)
         return;
     sendMsg(msg.message_id, msg.chat.id, HELP_TXT);
 });
 
-Bot.onText(/^\/start/, (msg, match) => {
+Bot.onText(/^\/start(@.*?bot)?/, (msg, match) => {
     logComm(msg);
     if (msg.from.is_bot)
+        return;
+    if (msg.chat.type !== "private" && match[1] !== `@${BOT_USRNAME}`)
         return;
     if (msg.chat.type === "private") {
         sendMsg(msg.message_id, msg.chat.id, HELP_TXT);
@@ -176,9 +196,11 @@ Bot.onText(/^\/start/, (msg, match) => {
     sendMsg(msg.message_id, msg.chat.id, `${BOT_NAME} has started listening!`);
 });
 
-Bot.onText(/^\/join/, (msg, match) => {
+Bot.onText(/^\/join(@.*?bot)?/, (msg, match) => {
     logComm(msg);
     if (msg.from.is_bot)
+        return;
+    if (msg.chat.type !== "private" && match[1] !== `@${BOT_USRNAME}`)
         return;
     if (msg.chat.type === "private") {
         sendMsg(msg.message_id, msg.chat.id, "Truth n Dare should be played in a Group of friends!");
@@ -198,9 +220,11 @@ Bot.onText(/^\/join/, (msg, match) => {
     sendMsg(msg.message_id, msg.chat.id, `\@${player} has joined the game!`);
 });
 
-Bot.onText(/^\/leave/, (msg, match) => {
+Bot.onText(/^\/leave(@.*?bot)?/, (msg, match) => {
     logComm(msg);
     if (msg.from.is_bot)
+        return;
+    if (msg.chat.type !== "private" && match[1] !== `@${BOT_USRNAME}`)
         return;
     if (msg.chat.type === "private") {
         sendMsg(msg.message_id, msg.chat.id, "Truth n Dare should be played in a Group of friends!");
@@ -221,9 +245,11 @@ Bot.onText(/^\/leave/, (msg, match) => {
     sendMsg(msg.message_id, msg.chat.id, `\@${player} has left the game`);
 });
 
-Bot.onText(/^\/list/, (msg, match) => {
+Bot.onText(/^\/list(@.*?bot)?/, (msg, match) => {
     logComm(msg);
     if (msg.from.is_bot)
+        return;
+    if (msg.chat.type !== "private" && match[1] !== `@${BOT_USRNAME}`)
         return;
     if (msg.chat.type === "private") {
         sendMsg(msg.message_id, msg.chat.id, "Truth n Dare should be played in a Group of friends!");
@@ -244,9 +270,11 @@ Bot.onText(/^\/list/, (msg, match) => {
     sendMsg(msg.message_id, msg.chat.id, reply);
 });
 
-Bot.onText(/^\/spin/, (msg, match) => {
+Bot.onText(/^\/spin(@.*?bot)?/, (msg, match) => {
     logComm(msg);
     if (msg.from.is_bot)
+        return;
+    if (msg.chat.type !== "private" && match[1] !== `@${BOT_USRNAME}`)
         return;
     if (msg.chat.type === "private") {
         sendMsg(msg.message_id, msg.chat.id, "Truth n Dare should be played in a Group of friends!");
@@ -275,9 +303,11 @@ Bot.onText(/^\/spin/, (msg, match) => {
     sendMsg(msg.message_id, msg.chat.id, reply);
 });
 
-Bot.onText(/^\/stop/, (msg, match) => {
+Bot.onText(/^\/stop(@.*?bot)?/, (msg, match) => {
     logComm(msg);
     if (msg.from.is_bot)
+        return;
+    if (msg.chat.type !== "private" && match[1] !== `@${BOT_USRNAME}`)
         return;
     if (msg.chat.type === "private") {
         sendMsg(msg.message_id, msg.chat.id, "Truth n Dare should be played in a Group of friends!");
@@ -291,9 +321,11 @@ Bot.onText(/^\/stop/, (msg, match) => {
     sendMsg(msg.message_id, msg.chat.id, `${BOT_NAME} has stopped listening!`);
 });
 
-Bot.onText(/^\/notes/, (msg, match) => {
+Bot.onText(/^\/notes(@.*?bot)?/, (msg, match) => {
     logComm(msg);
     if (msg.from.is_bot)
+        return;
+    if (msg.chat.type !== "private" && match[1] !== `@${BOT_USRNAME}`)
         return;
     Bot.sendMessage(
         msg.chat.id,
