@@ -82,7 +82,7 @@ Bot.onText(/^\/dev(@.*?bot)?/, (msg, match) => {
     sendMsg(msg.message_id, msg.chat.id, DEV_CMD);
 });
 
-Bot.onText(/^\/clnlog(@.*?bot)? (.*)/, (msg, match) => {
+Bot.onText(/^\/clnlog(@.*?bot)?(.*)/, (msg, match) => {
     if (msg.from.is_bot)
         return;
     if (msg.chat.type !== "private" && match[1] !== `@${BOT_USRNAME}`)
@@ -92,7 +92,7 @@ Bot.onText(/^\/clnlog(@.*?bot)? (.*)/, (msg, match) => {
         sendMsg(msg.message_id, msg.chat.id, "Command needs to be used in private chat.");
         return;
     }
-    if (match[2] === MASTER_PASSWD) {
+    if (match[2] === " " + MASTER_PASSWD) {
         sendMsg(msg.message_id, msg.chat.id, "Cleaning logs...");
         for (let i = 0; i < 1500; i++)
             console.log("");
@@ -100,7 +100,7 @@ Bot.onText(/^\/clnlog(@.*?bot)? (.*)/, (msg, match) => {
     } else {
         sendMsg(msg.message_id, msg.chat.id, "Authentication failure. This incident will be reported.");
         logComm(msg);
-        console.log(`AUTHF: ${msg.message_id ^ msg.chat.id}: /clnlog: entered password = '${match[1].substring(1)}'`);
+        console.log(`AUTHF: ${msg.message_id ^ msg.chat.id}: /clnlog: entered password = '${match[2].substring(1)}'`);
         return;
     }
 });
